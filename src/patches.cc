@@ -69,10 +69,29 @@ namespace Patch {
                 return qss;
             }
 
-            qss.append(
-                QStringLiteral("\n#twksLabel, #twksSeparator { font-family: \"%1\"; }\n")
-                    .arg(family)
-            );
+            // The stock footer rules are like "ReadingFooter[qApp_deviceIsX=true] #caption[qApp_deviceIsX=true]",
+            // which are more specific than a bare "#twksLabel". Qt resolves ties by order, so emit the same
+            // shapes (ReadingFooter is renamed to TwWidgetZonesContainer later) at the end of the sheet.
+            const QStringList devices = {
+                QString(), // no device attribute
+                QStringLiteral("[qApp_deviceIsTrilogy=true]"),
+                QStringLiteral("[qApp_deviceIsPhoenix=true]"),
+                QStringLiteral("[qApp_deviceIsDragon=true]"),
+                QStringLiteral("[qApp_deviceIsDaylight=true]"),
+                QStringLiteral("[qApp_deviceIsStorm=true]"),
+            };
+            const QStringList ids = { QStringLiteral("#twksLabel"), QStringLiteral("#twksSeparator") };
+
+            QString rules;
+            for (const QString& dev : devices) {
+                for (const QString& id : ids) {
+                    rules += QStringLiteral("ReadingFooter%1 %2%1 { font-family: \"%3\"; }\n").arg(dev, id, family);
+                    rules += QStringLiteral("ReadingFooter %1%2 { font-family: \"%3\"; }\n").arg(id, dev, family);
+                }
+            }
+            rules += QStringLiteral("#twksLabel, #twksSeparator { font-family: \"%1\"; }\n").arg(family);
+
+            qss.append(QStringLiteral("\n")).append(rules);
             return qss;
         }
 
