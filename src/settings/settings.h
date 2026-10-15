@@ -211,6 +211,7 @@ public:
 struct TweaksReadingSettings {
     QString bookmarkImage = "";
     QString bookmarkImageDark = "";
+    QString headerFooterFontFamily = "";
     int headerFooterHeightScale = 100;
     int headerFooterMargins = 50;
     int headerSpacerHeight = 0;
@@ -235,6 +236,7 @@ struct TweaksReadingSettings {
 
 class TweaksSettings {
     const char* READING_BOOKMARK_IMAGE = "Reading/BookmarkImage";
+    const char* READING_HEADER_FOOTER_FONT_FAMILY = "Reading/HeaderFooterFontFamily";
     const char* READING_HEADER_FOOTER_HEIGHT_SCALE = "Reading/HeaderFooterHeightScale";
     const char* READING_HEADER_FOOTER_MARGINS = "Reading/HeaderFooterMargins";
     const char* READING_HEADER_SPACER_HEIGHT = "Reading/HeaderSpacerHeight";

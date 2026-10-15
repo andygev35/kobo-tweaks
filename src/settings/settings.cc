@@ -55,6 +55,11 @@ void TweaksSettings::loadReadingSettings() {
         }
     }
 
+    // Strip characters that could break out of the QSS string
+    readingSettings.headerFooterFontFamily = getStringValue(READING_HEADER_FOOTER_FONT_FAMILY, readingSettings.headerFooterFontFamily)
+        .remove(QLatin1Char('"')).remove(QLatin1Char('\'')).remove(QLatin1Char(';')).remove(QLatin1Char('{')).remove(QLatin1Char('}'))
+        .trimmed();
+
     readingSettings.headerFooterHeightScale = qBound(50, getIntValue(READING_HEADER_FOOTER_HEIGHT_SCALE, readingSettings.headerFooterHeightScale), 100);
     readingSettings.headerFooterMargins = qBound(0, getIntValue(READING_HEADER_FOOTER_MARGINS, readingSettings.headerFooterMargins), 100);
 

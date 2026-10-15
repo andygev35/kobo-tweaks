@@ -3,6 +3,10 @@
 #include "colour_attr_cleaner.h"
 
 #include <QHBoxLayout>
+#include <QDir>
+#include <QDirIterator>
+#include <QFontDatabase>
+#include <QStringList>
 #include <QMetaEnum>
 #include <vector>
 
@@ -62,6 +66,61 @@ const std::vector<Qt::WidgetAttribute>& resolvedColourAttrs()
     return v;
 }
 
+namespace {
+// Nickel may only register /mnt/onboard/fonts with the book renderer, not with Qt's own font database
+// (which is what styles the header/footer). Load the font files ourselves if the family is unknown.
+// Returns the family name as Qt knows it (matched case-insensitively), or the requested name as a fallback.
+QString resolveFontFamily(const QString& requested) {
+    if (requested.isEmpty()) {
+        return requested;
+    }
+
+    static bool fontsLoaded = false;
+
+    auto findFamily = [&requested]() -> QString {
+        QFontDatabase db;
+        const QStringList families = db.families();
+        for (const QString& f : families) {
+            if (f.compare(requested, Qt::CaseInsensitive) == 0) {
+                return f;
+            }
+        }
+        return QString();
+    };
+
+    QString found = findFamily();
+    if (!found.isEmpty()) {
+        nh_log("font family \"%s\" already known to Qt", qPrintable(found));
+        return found;
+    }
+
+    if (!fontsLoaded) {
+        fontsLoaded = true;
+        int added = 0;
+        const QStringList dirs = { QStringLiteral("/mnt/onboard/fonts"), QStringLiteral("/mnt/onboard/.fonts") };
+        for (const QString& dir : dirs) {
+            QDirIterator it(dir, QStringList() << QStringLiteral("*.ttf") << QStringLiteral("*.otf") << QStringLiteral("*.ttc"),
+                            QDir::Files, QDirIterator::Subdirectories);
+            while (it.hasNext()) {
+                if (QFontDatabase::addApplicationFont(it.next()) >= 0) {
+                    added++;
+                }
+            }
+        }
+        nh_log("loaded %d font file(s) from the fonts folder", added);
+    }
+
+    found = findFamily();
+    if (found.isEmpty()) {
+        nh_log("font family \"%s\" not found in Qt after loading fonts", qPrintable(requested));
+        return requested;
+    }
+
+    nh_log("using font family \"%s\"", qPrintable(found));
+    return found;
+}
+}
+
 namespace ReadingViewHook {
     static TweaksSettings settings;
     static bool isDarkMode = false;
@@ -112,6 +171,7 @@ namespace ReadingViewHook {
 
         // Update QSS
         auto readingSettings = settings.getReadingSettings();
+        readingSettings.headerFooterFontFamily = resolveFontFamily(readingSettings.headerFooterFontFamily);
         QString rootQss = view->styleSheet();
 
         // Adjust topSpacer & bottomSpacer's heights
@@ -160,6 +220,7 @@ namespace ReadingViewHook {
         if (readingSettings.headerFooterHeightScale < 100) {
             patchedQss = Patch::ReadingView::scaleHeaderFooterHeight(patchedQss, readingSettings.headerFooterHeightScale);
         }
+        patchedQss = Patch::ReadingView::setFontFamily(patchedQss, readingSettings.headerFooterFontFamily);
         patchedQss.replace(QStringLiteral("ReadingFooter"), QStringLiteral("TwWidgetZonesContainer"));
 
         TwWidgetZonesContainer* headerContainer = emptyHeader ? nullptr : new TwWidgetZonesContainer(readingSettings, patchedQss);

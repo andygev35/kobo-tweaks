@@ -1,0 +1,21 @@
+name: Build KoboRoot.tgz
+on:
+  workflow_dispatch:
+  push:
+    branches: ['**']
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Build with nickeltc
+        run: |
+          docker run --volume="$PWD:$PWD" --workdir="$PWD" --entrypoint=make --rm ghcr.io/pgaskin/nickeltc:1.0 clean
+          docker run --volume="$PWD:$PWD" --workdir="$PWD" --entrypoint=make --rm ghcr.io/pgaskin/nickeltc:1.0 all koboroot
+          sudo chown -R "$(id -u):$(id -g)" .
+      - uses: actions/upload-artifact@v4
+        with:
+          name: KoboRoot
+          path: KoboRoot.tgz
