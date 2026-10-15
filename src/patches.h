@@ -7,6 +7,7 @@ namespace Patch {
         QString setFixedHeight(QString qss, const QString& selector, int height);
         QString resetHeight(QString qss, const QString& selector);
         QString setPaddings(QString qss, const QString& selector, int top, int right, int bottom, int left);
+        QString setFontFamily(QString qss, const QString& family);
         QString addBrightnessLabelQss(const QString& qss);
     }
 }

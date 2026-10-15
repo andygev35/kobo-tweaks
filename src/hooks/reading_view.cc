@@ -160,6 +160,7 @@ namespace ReadingViewHook {
         if (readingSettings.headerFooterHeightScale < 100) {
             patchedQss = Patch::ReadingView::scaleHeaderFooterHeight(patchedQss, readingSettings.headerFooterHeightScale);
         }
+        patchedQss = Patch::ReadingView::setFontFamily(patchedQss, readingSettings.headerFooterFontFamily);
         patchedQss.replace(QStringLiteral("ReadingFooter"), QStringLiteral("TwWidgetZonesContainer"));
 
         TwWidgetZonesContainer* headerContainer = emptyHeader ? nullptr : new TwWidgetZonesContainer(readingSettings, patchedQss);

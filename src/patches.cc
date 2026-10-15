@@ -64,6 +64,18 @@ namespace Patch {
             return qss;
         }
 
+        QString setFontFamily(QString qss, const QString& family) {
+            if (family.isEmpty()) {
+                return qss;
+            }
+
+            qss.append(
+                QStringLiteral("\n#twksLabel, #twksSeparator { font-family: \"%1\"; }\n")
+                    .arg(family)
+            );
+            return qss;
+        }
+
         QString addBrightnessLabelQss(const QString& qss) {
             QString result(qss);
 

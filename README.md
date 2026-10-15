@@ -120,6 +120,7 @@ Settings can be customized by editing the `.adds/tweaks/settings.ini` file on yo
 | Setting and description | Values |
 |-|-|
 | `BookmarkImage`<br>---<br><i>Custom bookmark image file name, including extension, located in the `.adds/tweaks/images`</i>| String |
+| `HeaderFooterFontFamily`<br>---<br><i>Font family used by all header and footer widgets (e.g. `Roboto Condensed`). The font must be installed on the device (`fonts` folder). Leave empty to keep the default font</i> | String<br><b>Default:</b> empty |
 | `HeaderFooterHeightScale`<br>---<br><i>Percentage-based scaling factor applied to the original header and footer height.<br>For example, a value of `66` means the header and footer are rendered at `66 percent` of their original height.</i> | <b>Unit:</b> %<br><b>Range:</b> 50-100<br><b>Default:</b> 100 |
 | `HeaderFooterMargins`<br>---<br><i>Sets the left and right margins for both header and footer</i> | <b>Range:</b> 0-100<br><b>Default:</b> 50 |
 | `HeaderSpacerHeight`, `FooterSpacerHeight`<br>---<br><i>Sets the amount of space between header/footer and the text</i> | <b>Range:</b> 0-100<br><b>Default:</b> 0 |
