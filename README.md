@@ -5,6 +5,7 @@ A beginner-friendly addon for customizing Kobo eReaders.
 ## 🔥 1. Features
 - Customize various UI elements and features of Kobo eReaders (similar to [KoboPatch](https://github.com/pgaskin/kobopatch), can be used with patched firmware)
   - Reduces header and footer's heights  
+  - Uses a custom font (e.g. Roboto Condensed) for header and footer widgets
 - Widgets for Reading view:
   - Battery and Clock widgets (similar to [NickelClock](https://github.com/shermp/NickelClock))
   - Book widgets: title, progress, pages, remaining time
@@ -49,6 +50,7 @@ A beginner-friendly addon for customizing Kobo eReaders.
         <pre lang="INI">[Reading]
 BookmarkImage=bongo-cat.png
 FooterSpacerHeight=10
+HeaderFooterFontFamily=Roboto Condensed
 HeaderFooterHeightScale=50
 HeaderFooterMargins=46
 HeaderSpacerHeight=10
@@ -120,7 +122,7 @@ Settings can be customized by editing the `.adds/tweaks/settings.ini` file on yo
 | Setting and description | Values |
 |-|-|
 | `BookmarkImage`<br>---<br><i>Custom bookmark image file name, including extension, located in the `.adds/tweaks/images`</i>| String |
-| `HeaderFooterFontFamily`<br>---<br><i>Font family used by all header and footer widgets (e.g. `Roboto Condensed`). The font must be installed on the device (`fonts` folder). Leave empty to keep the default font</i> | String<br><b>Default:</b> empty |
+| `HeaderFooterFontFamily`<br>---<br><i>Font family used by all header and footer widgets, e.g. `Roboto Condensed`. Write the name without quotes and without commas.<br>Put the font files (`.ttf`, `.otf`, `.ttc`) in the `fonts` folder of your Kobo; if Kobo's UI doesn't know the font yet, Kobo Tweaks loads it from there itself. The name is matched case-insensitively, so use the family name shown in the book's font menu.<br>Leave empty to keep the default font.</i> | String<br><b>Default:</b> empty |
 | `HeaderFooterHeightScale`<br>---<br><i>Percentage-based scaling factor applied to the original header and footer height.<br>For example, a value of `66` means the header and footer are rendered at `66 percent` of their original height.</i> | <b>Unit:</b> %<br><b>Range:</b> 50-100<br><b>Default:</b> 100 |
 | `HeaderFooterMargins`<br>---<br><i>Sets the left and right margins for both header and footer</i> | <b>Range:</b> 0-100<br><b>Default:</b> 50 |
 | `HeaderSpacerHeight`, `FooterSpacerHeight`<br>---<br><i>Sets the amount of space between header/footer and the text</i> | <b>Range:</b> 0-100<br><b>Default:</b> 0 |
