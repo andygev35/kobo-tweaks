@@ -4,7 +4,7 @@
 #include <NickelHook.h>
 
 #ifndef ADDON_VERSION
-    #define ADDON_VERSION "1.0.0"
+    #define ADDON_VERSION "1.1.0"
 #endif
 
 #ifndef DATA_DIR
