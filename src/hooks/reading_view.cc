@@ -75,8 +75,6 @@ QString resolveFontFamily(const QString& requested) {
         return requested;
     }
 
-    static bool fontsLoaded = false;
-
     auto findFamily = [&requested]() -> QString {
         QFontDatabase db;
         const QStringList families = db.families();
@@ -94,8 +92,10 @@ QString resolveFontFamily(const QString& requested) {
         return found;
     }
 
-    if (!fontsLoaded) {
-        fontsLoaded = true;
+    // Do this on every call where the family is missing, not just once per session:
+    // Nickel can drop application fonts from Qt's database between books, so the
+    // font we loaded for the first book may be gone by the time the next one opens.
+    {
         int added = 0;
         const QStringList dirs = { QStringLiteral("/mnt/onboard/fonts"), QStringLiteral("/mnt/onboard/.fonts") };
         for (const QString& dir : dirs) {
